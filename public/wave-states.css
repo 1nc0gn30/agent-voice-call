@@ -1,0 +1,310 @@
+/* ==========================================================================
+   Wave States CSS • Cockpit Telemetry & Precision Interaction Layer
+   States: :focus-visible • :hover • :active • :empty • :invalid / :disabled
+   prefers-reduced-motion guarantees
+   ========================================================================== */
+
+/* 1. Precision Hover & Micro-Tactile States */
+.test-speaker-btn {
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.test-speaker-btn:hover {
+  background-color: rgba(212, 175, 55, 0.22);
+  border-color: rgba(212, 175, 55, 0.6);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.25);
+}
+
+.test-speaker-btn:active {
+  transform: scale(0.96);
+}
+
+.turn-replay-btn {
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.turn-replay-btn:hover {
+  background-color: rgba(212, 175, 55, 0.32);
+  border-color: rgba(212, 175, 55, 0.75);
+  color: #FFFFFF;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+}
+
+.turn-replay-btn:active {
+  transform: scale(0.95);
+}
+
+.secondary-btn {
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease, color 0.15s ease;
+}
+
+.secondary-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(212, 175, 55, 0.45);
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.18);
+  color: #FFFFFF;
+}
+
+.secondary-btn:active {
+  transform: scale(0.94);
+}
+
+.mic-btn {
+  transition: filter 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.mic-btn:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 0 32px rgba(16, 185, 129, 0.65);
+}
+
+.mic-btn:active {
+  transform: scale(0.94);
+}
+
+.end-call-btn {
+  transition: filter 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
+}
+
+.end-call-btn:hover {
+  background: linear-gradient(135deg, #F87171 0%, #B91C1C 100%);
+  border-color: rgba(239, 68, 68, 0.8);
+  box-shadow: 0 0 25px rgba(239, 68, 68, 0.55);
+  filter: brightness(1.08);
+}
+
+.end-call-btn:active {
+  transform: scale(0.92);
+}
+
+.text-fallback-input:hover {
+  color: #FFFFFF;
+}
+
+.text-fallback-send {
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.text-fallback-send:hover {
+  background-color: #F5D77F;
+  box-shadow: 0 0 14px rgba(212, 175, 55, 0.45);
+}
+
+.text-fallback-send:active {
+  transform: scale(0.92);
+}
+
+.join-btn {
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.join-btn:hover {
+  background: linear-gradient(135deg, #F5D77F 0%, #D4AF37 100%);
+  box-shadow: 0 0 42px rgba(212, 175, 55, 0.65);
+  transform: translateY(-1px);
+}
+
+.join-btn:active {
+  transform: translateY(0) scale(0.97);
+}
+
+.unmute-banner-btn {
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.unmute-banner-btn:hover {
+  background-color: #F5D77F;
+  box-shadow: 0 0 16px rgba(212, 175, 55, 0.7);
+}
+
+.unmute-banner-btn:active {
+  transform: scale(0.95);
+}
+
+.modal-btn {
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.modal-btn:hover {
+  background-color: #F5D77F;
+  box-shadow: 0 0 24px rgba(212, 175, 55, 0.5);
+}
+
+.modal-btn:active {
+  transform: scale(0.96);
+}
+
+.modal-card a {
+  transition: filter 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.modal-card a:hover {
+  filter: brightness(1.12);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.modal-card a:active {
+  transform: translateY(0) scale(0.97);
+}
+
+/* 2. Precision Focus-Visible Rings (Accessible Keyboard Navigation) */
+.test-speaker-btn:focus-visible {
+  outline: 2px solid var(--gold-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
+}
+
+.turn-replay-btn:focus-visible {
+  outline: 2px solid var(--gold-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+.text-fallback-input:focus-visible {
+  outline: none;
+}
+
+.text-fallback-send:focus-visible {
+  outline: 2px solid #FFFFFF;
+  outline-offset: 2px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.ctrl-btn:focus-visible {
+  outline: 2px solid var(--gold-primary);
+  outline-offset: 3px;
+  box-shadow: 0 0 16px rgba(212, 175, 55, 0.4);
+}
+
+.mic-btn:focus-visible {
+  outline: 2px solid var(--emerald-active);
+  outline-offset: 4px;
+  box-shadow: 0 0 24px rgba(16, 185, 129, 0.6);
+}
+
+.end-call-btn:focus-visible {
+  outline: 2px solid var(--ruby-alert);
+  outline-offset: 3px;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+}
+
+.join-btn:focus-visible {
+  outline: 2px solid #FFFFFF;
+  outline-offset: 3px;
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.5);
+}
+
+.unmute-banner-btn:focus-visible {
+  outline: 2px solid #FFFFFF;
+  outline-offset: 2px;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.6);
+}
+
+.modal-btn:focus-visible {
+  outline: 2px solid #FFFFFF;
+  outline-offset: 2px;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.5);
+}
+
+.modal-card a:focus-visible {
+  outline: 2px solid #FFFFFF;
+  outline-offset: 2px;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+}
+
+/* 3. Empty Presentation Fallbacks */
+.transcript-viewport:empty {
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.transcript-viewport:empty::after {
+  content: "Awaiting audio stream connection...";
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: rgba(148, 163, 184, 0.5);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.modal-debrief-box:empty::after {
+  content: "No telemetry debrief recorded for this session.";
+  font-style: italic;
+  color: rgba(148, 163, 184, 0.6);
+}
+
+.turn-text:empty::after {
+  content: "Listening...";
+  font-style: italic;
+  opacity: 0.6;
+}
+
+.call-timer:empty::after {
+  content: "00:00";
+}
+
+.live-text:empty::after {
+  content: "STANDBY";
+}
+
+/* 4. Error Presentation & Disabled States */
+.text-fallback-input:invalid {
+  color: var(--ruby-alert);
+}
+
+.text-fallback-wrap:has(.text-fallback-input:invalid) {
+  border-color: rgba(239, 68, 68, 0.65);
+  box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.3), 0 0 16px rgba(239, 68, 68, 0.2);
+}
+
+button:disabled,
+[aria-disabled="true"] {
+  opacity: 0.42;
+  cursor: not-allowed !important;
+  pointer-events: none;
+  filter: grayscale(0.5);
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.text-fallback-send:disabled {
+  background: #4B5563;
+  color: #9CA3AF;
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* 5. Prefers-Reduced-Motion Guarantees */
+@media (prefers-reduced-motion: reduce) {
+  .test-speaker-btn,
+  .turn-replay-btn,
+  .secondary-btn,
+  .mic-btn,
+  .end-call-btn,
+  .text-fallback-send,
+  .join-btn,
+  .unmute-banner-btn,
+  .modal-btn,
+  .modal-card a {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .join-btn:hover,
+  .join-btn:active,
+  .test-speaker-btn:active,
+  .turn-replay-btn:active,
+  .secondary-btn:active,
+  .mic-btn:active,
+  .end-call-btn:active,
+  .text-fallback-send:active,
+  .unmute-banner-btn:active,
+  .modal-btn:active,
+  .modal-card a:hover,
+  .modal-card a:active {
+    transform: none !important;
+  }
+}
