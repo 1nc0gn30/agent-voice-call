@@ -176,7 +176,7 @@ class VoiceCallHandler(http.server.BaseHTTPRequestHandler):
             session_id, token = self.server.manager.create_call_token(channel=channel, voice=voice)
 
             # Secure HTTPS URL for mobile browser microphone permissions
-            tailscale_domain = "zoth-pill.tailb0828c.ts.net"
+            tailscale_domain = "zothos.local"
             call_url = f"https://{tailscale_domain}/call?token={token}"
             fallback_url = f"http://100.106.132.5:{self.server.server_port}/call?token={token}"
 

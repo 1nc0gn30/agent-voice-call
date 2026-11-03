@@ -15,7 +15,7 @@
 
   // HTTPS Auto-Upgrade for Tailscale on mobile devices (Guarantees Web Speech API permissions)
   if (window.location.protocol === 'http:' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-    const targetHttps = `https://zoth-pill.tailb0828c.ts.net/call?token=${encodeURIComponent(token)}&channel=${encodeURIComponent(channel)}`;
+    const targetHttps = `https://zothos.local/call?token=${encodeURIComponent(token)}&channel=${encodeURIComponent(channel)}`;
     window.location.replace(targetHttps);
     return;
   }
