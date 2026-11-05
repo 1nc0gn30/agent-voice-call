@@ -245,6 +245,22 @@
   </div>
 
   <script src="/call_app.js"></script>
-  <script src="/assets/sovereign-upgrade.js" defer></script>
+  
+
+  <script src="/sovereign_tutorial.js"></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", function() {
+      if (window.createSovereignTutorial) {
+        window.createSovereignTutorial({
+          toolId: "agent-voice-call",
+          toolName: "Agent Voice Call",
+          tagline: "Talk out loud to your AI agents with zero lag and fun 3D avatars!",
+          accentColor: "#38BDF8",
+          steps: [{"icon": "\ud83c\udf99\ufe0f", "title": "Real Voice Chat", "desc": "Press Start Call and just talk! The AI listens, understands, and replies through your speakers with natural timing."}, {"icon": "\u26a1", "title": "Interrupt Anytime", "desc": "You don't have to wait for the AI to finish talking. Start speaking mid-sentence and it immediately pauses to hear you."}, {"icon": "\ud83c\udfad", "title": "3D Living Avatar", "desc": "Watch the 3D mascot emote and move its mouth in sync with every word spoken."}]
+        });
+      }
+    });
+  </script>
+
 </body>
 </html>
