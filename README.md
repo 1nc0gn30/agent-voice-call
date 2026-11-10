@@ -18,7 +18,7 @@
 
 ## 🏛️ Architectural Overview
 
-**Agent Voice Call** is an official sovereign tool in the **[Zoth Studio v2](https://zoth.nullai.tech)** (72-Tool Matrix) and **[ZothOS Linux 3.3](https://zothos.nullai.tech)** ecosystem, engineered by **1nc0gn30 • NullAI ([@1nc0gn30](https://github.com/1nc0gn30))**.
+**Agent Voice Call** is an official sovereign tool in the **[Zoth Studio v2](https://zoth.nullai.tech)** (77-Tool Matrix) and **[ZothOS Linux 3.3](https://zothos.nullai.tech)** ecosystem, engineered by **1nc0gn30 • NullAI ([@1nc0gn30](https://github.com/1nc0gn30))**.
 
 | Property | Specification |
 | :--- | :--- |
@@ -43,7 +43,7 @@
 ## ⚙️ How It Works
 
 1. **Standalone Enclave (`127.0.0.1:8114`)**: Serves an interactive audio cockpit backed by `server.py` with live `/health`, `/api/call/create`, and `/api/call/status` endpoints.
-2. **Zoth Studio v2 God-Mode Route**: Deeply integrated into the 72-Tool Sovereign Matrix at `/tools/agent-voice-call`.
+2. **Zoth Studio v2 God-Mode Route**: Deeply integrated into the 77-Tool Sovereign Matrix at `/tools/agent-voice-call`.
 3. **ZothOS CLI (`agent-voice-call`)**: Native terminal binary supporting automated call generation, voice audits, and JSON telemetry streaming.
 
 ---
