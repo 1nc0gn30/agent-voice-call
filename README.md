@@ -1,138 +1,123 @@
-<div align="center">
-  <img src="assets/hero-banner.svg" alt="Agent Voice Call — Sovereign Architecture Banner" width="100%" />
-</div>
+# Agent Voice Call Station
 
-<br />
+![Agent Voice Call Hero Banner](assets/hero-banner.svg)
 
-<div align="center">
-  <a href="https://zoth.nullai.tech/tools/agent-voice-call"><img src="https://img.shields.io/badge/Zoth_Studio_v2-Workspace-D4AF37?style=for-the-badge&logo=sparkles&logoColor=black" alt="Zoth Studio Workspace" /></a>
-  <a href="https://zothos.nullai.tech"><img src="https://img.shields.io/badge/ZothOS_v3.3-Port_:8114-38BDF8?style=for-the-badge&logo=linux&logoColor=black" alt="Port :8114" /></a>
-  <a href="https://nullai.tech"><img src="https://img.shields.io/badge/Security-100%25_Zero--Egress-10B981?style=for-the-badge&logo=shield&logoColor=black" alt="Zero Egress" /></a>
-</div>
+**Agent Voice Call** (`agent-voice-call`) is a zero-dependency Python 3.9+ full-duplex voice calling workstation and HTTP server (`127.0.0.1:8114`) for conversational sessions with local AI agents. It pairs a Web Audio / Web Speech browser cockpit with a 3-tier speech synthesis pipeline, token-scoped call sessions, and post-call debrief ingestion into Neuro-Memory (`:8094`), Flight Recorder (`:8104`), and optional Signal/SimpleX channels.
 
-# ⚡ Agent Voice Call
-
-> **Autonomous sovereign real-time voice cockpit, live audio WebSocket streaming, multi-persona voice synthesizer, and zero-telemetry call protocol.**
+- **Zoth Studio v2 Dossier**: [https://zoth.nullai.tech/tools/agent-voice-call](https://zoth.nullai.tech/tools/agent-voice-call)
+- **Repository**: [https://github.com/1nc0gn30/agent-voice-call](https://github.com/1nc0gn30/agent-voice-call)
+- **Default Loopback Endpoint**: `http://127.0.0.1:8114`
 
 ---
 
-## 🏛️ Architectural Overview
+## Overview
 
-**Agent Voice Call** is an official sovereign tool in the **[Zoth Studio v2](https://zoth.nullai.tech)** (77-Tool Matrix) and **[ZothOS Linux 3.3](https://zothos.nullai.tech)** ecosystem, engineered by **1nc0gn30 • NullAI ([@1nc0gn30](https://github.com/1nc0gn30))**.
+`agent-voice-call` provides voice interaction without external Python package dependencies:
 
-| Property | Specification |
-| :--- | :--- |
-| **Tool ID** | `agent-voice-call` |
-| **Category** | `Voice & Real-Time` |
-| **Loopback Port** | `http://127.0.0.1:8114` |
-| **Execution Mode** | `python3 server.py --port 8114` |
-| **Zoth Studio Route** | [`https://zoth.nullai.tech/tools/agent-voice-call`](https://zoth.nullai.tech/tools/agent-voice-call) |
-
----
-
-## 📖 What It Does
-
-- **Real-Time Voice Calling Cockpit**: Low-latency bidirectional voice communication between human users and sovereign AI agents (Azoth, Ghostbyte, Athena, Mercury, Kitsune, Chronos).
-- **Kokoro TTS Engine Integration**: Hardware-accelerated local text-to-speech synthesis running on port 9394 with natural speech rhythm and zero cloud telemetry.
-- **WebSocket Audio Streaming**: High-fidelity chunked audio streaming with live waveform spectrums and real-time STT transcripts.
-- **1-Click Call Link Dispatcher**: Generates instant secure calling links compatible with Signal, SimpleX, or standalone web browsers.
-- **100% Free & Open-Access**: Zero paywalls, zero license locks, zero telemetry leaks.
+- **3-Tier Speech Synthesis Pipeline (`tts_bridge.py`)**:
+  1. **Tier 1 — Edge-TTS + FFmpeg**: Neural speech converted to 24 kHz mono 16-bit PCM WAV (`pcm_s16le`).
+  2. **Tier 2 — Kokoro Voice Server (`127.0.0.1:9394/speak`)**: Local neural TTS server when active.
+  3. **Tier 3 — `espeak-ng` / `espeak`**: Offline local speech synthesizer fallback.
+- **Six Voice Personas**: `azoth`, `ghostbyte`, `athena`, `mercury`, `kitsune`, and `chronos`.
+- **Echo-Guarded Web Cockpit (`/call`)**: Browser Web Speech API recognition with 8-second silence auto-send, Enter-to-send text input, Web Audio API `decodeAudioData` playback, and frequency-reactive 60 fps canvas visualization.
+- **Session & Debrief Engine (`call_engine.py`)**: Single-use `secrets.token_urlsafe(16)` call tokens (2-hour TTL), local Ollama (`127.0.0.1:11434/api/generate`) dialogue routing with deterministic local fallback, and structured session transcripts on `/api/call/end`.
 
 ---
 
-## ⚙️ How It Works
+## Architecture
 
-1. **Standalone Enclave (`127.0.0.1:8114`)**: Serves an interactive audio cockpit backed by `server.py` with live `/health`, `/api/call/create`, and `/api/call/status` endpoints.
-2. **Zoth Studio v2 God-Mode Route**: Deeply integrated into the 77-Tool Sovereign Matrix at `/tools/agent-voice-call`.
-3. **ZothOS CLI (`agent-voice-call`)**: Native terminal binary supporting automated call generation, voice audits, and JSON telemetry streaming.
+```text
+Browser / Mobile Client (/call)
+   │  Web Speech API + Web Audio API
+   ▼
+VoiceCallServer (127.0.0.1:8114)
+   ├── CallManager (session tokens, turn history, Ollama :11434 dialogue)
+   ├── tts_bridge (Edge-TTS -> Kokoro :9394 -> espeak-ng PCM WAV / Opus OGG)
+   └── Post-Call Debrief -> Neuro-Memory (:8094) + Flight Recorder (:8104)
+```
+
+### Environment Configuration
+
+| Variable | Default | Purpose |
+| :--- | :--- | :--- |
+| `ZOTH_BIND_HOST` | `127.0.0.1` | Default bind interface IP when `--host` is omitted |
+| `ZOTH_TAILSCALE_IP` | `127.0.0.1` | Tailnet IPv4 (e.g., `100.64.0.10` or `<tailscale-ip>`) used in fallback call URLs |
+| `ZOTH_TAILSCALE_DOMAIN` | `zothos.local` | HTTPS hostname emitted in `/api/call/create` for mobile microphone permissions |
+| `KOKORO_PORT` | `9394` | Local Kokoro TTS daemon port |
+| `EDGE_TTS_BIN` | `/opt/zothos-ai-env/bin/edge-tts` | Path to `edge-tts` binary (falls back to `PATH` lookup) |
+| `SIGNAL_ACCOUNT` | *(empty)* | Optional Signal recipient identifier for UNIX socket `/tmp/signal-cli.sock` debriefs |
 
 ---
 
-## 💻 ZothOS CLI & Server Commands
+## Quickstart
 
 ```bash
-# Check status and health
-agent-voice-call --status
-agent-voice-call status
+git clone https://github.com/1nc0gn30/agent-voice-call.git
+cd agent-voice-call
+python3 -m pip install -e .
 
-# Output telemetry in JSON format
+# Start the HTTP workstation on 127.0.0.1:8114
+agent-voice-call serve --host 127.0.0.1 --port 8114
+```
+
+You can also run directly from source without editable installation:
+
+```bash
+python3 server.py serve --port 8114
+```
+
+Open `http://127.0.0.1:8114/call` in a Chromium or WebKit browser.
+
+---
+
+## CLI & ZothOS v3.4.0 Integration
+
+On ZothOS v3.4.0, `agent-voice-call` is exposed as a system CLI wrapper:
+
+```bash
+# Inspect daemon health and available voices
+agent-voice-call --status
 agent-voice-call --json
 
-# Generate a 1-click voice call link
-agent-voice-call call --channel signal --voice azoth
+# Subcommand status check
+agent-voice-call status --port 8114 --json
 
-# Launch the standalone workstation server
-python3 server.py --port 8114
+# Generate a scoped live call session link
+agent-voice-call call --channel web --voice azoth --port 8114
 ```
 
 ---
 
-## ☕ Support 1nc0gn30 • NullAI & NullAI
+## REST API Reference
 
-Agent Voice Call is 100% free, open-source, and sovereign software with zero paywalls. If this tool brings you value, consider supporting our ongoing development:
+Mutating `POST` routes enforce local-origin CSRF validation (`127.0.0.1`, `localhost`, `[::1]`, or omitting `Origin` for local CLI requests).
 
-- **☕ Buy Us a Coffee (Stripe)**: [buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X](https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X)
-- **◎ Solana Tip Address**: `GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK`
-
----
-
-<div align="center">
-  <sub>Engineered by <b>1nc0gn30 • NullAI</b> (<a href="https://github.com/1nc0gn30">@1nc0gn30</a>) &bull; <a href="https://nullai.tech">NullAI Platform</a> &bull; <a href="https://zoth.nullai.tech">Zoth Studio v2</a></sub>
-</div>
-
----
-
-## 🏛️ ZothOS v3.4, Zoth Studio v2 & Obsidian Second Brain Ecosystem
-
-```mermaid
-flowchart LR
-    subgraph ZothOS["🐧 ZothOS v3.4 CLI & Braille TUI"]
-        CLI["agent-voice-call --help / --json"]
-        TUI["agent-voice-call-tui<br/>Unicode U+2800 2x4 Braille"]
-    end
-
-    subgraph Workstation["⚡ Sovereign Workstation"]
-        WEB["http://127.0.0.1:8114<br/>REST API & /health"]
-    end
-
-    subgraph Studio["🌌 Zoth Studio v2 & ZothOS-Lite"]
-        GODMODE["http://127.0.0.1:3000/tools/agent-voice-call<br/>God-Mode Workstation"]
-        LITE["http://127.0.0.1:8145<br/>ZothOS-Lite Web Desktop"]
-    end
-
-    subgraph SecondBrain["💎 Obsidian Second Brain & STDP"]
-        TRACKER["http://127.0.0.1:8151<br/>Zoth Obsidian Tracker"]
-        NEURO["http://127.0.0.1:8094<br/>Neuro-Memory STDP Cortex"]
-        NOTE["Studio/Tools/Studio agent-voice-call.md"]
-    end
-
-    CLI --> WEB
-    TUI --> WEB
-    WEB <--> GODMODE
-    WEB <--> LITE
-    WEB --> TRACKER
-    TRACKER <--> NOTE
-    NOTE <--> NEURO
-```
-
-### Cross-Surface Integration Matrix
-
-| Surface | Endpoint / Binary | Capabilities |
+| Method | Endpoint | Description |
 | :--- | :--- | :--- |
-| **Standalone Workstation** | `http://127.0.0.1:8114` | 100% Free & Open-Access Web Deck, live `/health` & REST telemetry |
-| **Zoth Studio v2 Route** | `http://127.0.0.1:3000/tools/agent-voice-call` | Interactive God-Mode component inside Zoth Studio (`https://zoth.nullai.tech`) |
-| **ZothOS v3.4 CLI & TUI** | `agent-voice-call` / `agent-voice-call-tui` | Global binary in `/usr/local/bin/` with Unicode `U+2800` Braille TUI & `--json` output |
-| **ZothOS-Lite Web Desktop** | `http://127.0.0.1:8145` | Browser-native KDE-style window manager & terminal launcher |
-| **Zoth Obsidian Tracker** | `http://127.0.0.1:8151` | Interactive Obsidian Second Brain vault explorer (`~/Documents/Obsidian Vault/Studio/Tools/Studio agent-voice-call.md`) |
-| **Neuro-Memory STDP Cortex** | `http://127.0.0.1:8094` | 3-Factor STDP synaptic memory daemon & 21-tool MCP server |
+| `GET` | `/`, `/call` | Serve the browser voice call cockpit (`public/index.html`) |
+| `GET` | `/health`, `/status`, `/api/stats` | Daemon health, active session count, `kokoro_online`, and voice IDs |
+| `GET` | `/api/voices` | Full voice persona map (`id`, `edge_voice`, `label`, `tone`) |
+| `GET` | `/api/call/session?token=<tok>` | Validate or auto-provision an active web call session |
+| `GET` | `/api/call/welcome?voice=azoth` | Synthesize a base64 PCM WAV greeting for speaker verification |
+| `POST` | `/api/call/create` | Create a session token (`{"channel": "signal", "voice": "azoth"}`) |
+| `POST` | `/api/call/speak` | Submit user utterance (`{"token": "...", "text": "...", "voice": "azoth"}`) and receive `reply_text` + `audio_base64` |
+| `POST` | `/api/call/end` | Terminate session (`{"token": "..."}`) and return structured transcript summary |
+
+---
+
+## Testing & Verification
 
 ```bash
-# Inspect CLI & Unicode U+2800 Braille TUI on ZothOS v3.4
-agent-voice-call --help
-agent-voice-call-tui --status
-agent-voice-call-tui --json
-
-# Verify Second Brain Vault & 12-Step Verification Gallery on :8151
-zoth-obsidian-tracker --verify
+PYTHONPATH=src python3 -m pytest -q
+./bin/agent-voice-call --help
+./bin/agent-voice-call --json
 ```
 
+---
+
+## Support & License
+
+100% free and open-source software under the MIT License. No paywalls, feature gates, or telemetry tracking.
+
+- Optional support: [Buy Us a Coffee via Stripe](https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X)
+- Engineered by **1nc0gn30** (`@1nc0gn30`, [https://1nc0gn30.si](https://1nc0gn30.si)) • **NullAI** ([https://nullai.tech](https://nullai.tech))

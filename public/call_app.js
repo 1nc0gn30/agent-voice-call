@@ -793,7 +793,7 @@
           }
         }
       } catch (err) {}
-      fallbackBrowserTTS("I am on the line, Neal. Tap the mic or speak naturally—I am listening.");
+      fallbackBrowserTTS("I am on the line. Tap the mic or speak naturally—I am listening.");
     });
   }
 
@@ -820,7 +820,7 @@
       elModalDuration.textContent = `Session: ${s.session_id || 'active'} • Duration: ${durationStr} • Turns: ${s.total_turns || 2} • Voice: ${(s.voice || currentVoice).toUpperCase()}`;
       elModalDebrief.textContent = s.dialogue
         ? `${s.dialogue}\n\n✓ Synced to Neuro-Memory (:8094), Flight Recorder (:8104) & Signal/SimpleX.`
-        : `Transcript and key decisions have been delivered to your Signal (+19482047987) and SimpleX (@1nc0gn30) channels.`;
+        : `Transcript and key decisions have been delivered to your configured Signal and SimpleX (@1nc0gn30) channels.`;
       elModalDebrief.style.whiteSpace = 'pre-wrap';
       elModalDebrief.style.textAlign = 'left';
       elModal.style.display = 'flex';
@@ -853,7 +853,7 @@
       }
     } catch (e) {
       console.warn('Welcome voice fetch error:', e);
-      fallbackBrowserTTS(`Live on the line, Neal. Azoth is listening.`);
+      fallbackBrowserTTS(`Live on the line. Azoth is listening.`);
     }
   });
 

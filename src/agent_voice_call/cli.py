@@ -50,11 +50,13 @@ def cmd_serve(args: argparse.Namespace) -> int:
 
     kokoro_status = "● ONLINE (:9394)" if is_kokoro_online() else "○ OFFLINE (Check kokoro-voice.service)"
     
+    tailscale_ip = os.environ.get("ZOTH_TAILSCALE_IP", "<tailscale-ip>")
+
     print("\n" + "=" * 70)
-    print("  🎙️ ZOTH AGENT LIVE VOICE CALL STATION • PORT 8114")
+    print("  ZOTH AGENT LIVE VOICE CALL STATION • PORT 8114")
     print("=" * 70)
     print(f"  • Web Call Cockpit:   http://{args.host}:{args.port}/call")
-    print(f"  • Tailscale Network:  http://100.106.132.5:{args.port}/call")
+    print(f"  • Tailscale Network:  http://{tailscale_ip}:{args.port}/call")
     print(f"  • Kokoro Voice Engine: {kokoro_status}")
     print(f"  • Available Voices:   {', '.join(VOICES.keys())}")
     print("=" * 70 + "\n")
@@ -109,7 +111,7 @@ def cmd_status(host: str = "127.0.0.1", port: int = 8114, as_json: bool = False)
         return 0
 
     print("\n" + "=" * 70)
-    print("  🎙️ ZOTH AGENT LIVE VOICE CALL STATION v2.5.0 • PORT 8114")
+    print("  ZOTH AGENT LIVE VOICE CALL STATION v2.5.0 • PORT 8114")
     print("=" * 70)
     state_color = "\033[38;5;48mONLINE\033[0m" if live_info else "\033[38;5;208mSTANDBY\033[0m"
     print(f"  • Daemon Status:     {state_color} ({url})")

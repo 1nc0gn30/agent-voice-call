@@ -115,7 +115,7 @@ class VoiceCallHandler(http.server.BaseHTTPRequestHandler):
             voice = query.get("voice", ["azoth"])[0]
             v_info = VOICES.get(voice, VOICES["azoth"])
             v_name = v_info["label"]
-            text = f"Live on the line, Neal. {v_name} is listening."
+            text = f"Live on the line. {v_name} is listening."
             audio_wav = synthesize_speech_wav(text, voice_name=voice)
             audio_b64 = base64.b64encode(audio_wav).decode("ascii") if audio_wav else None
             self._send_json({
@@ -176,9 +176,10 @@ class VoiceCallHandler(http.server.BaseHTTPRequestHandler):
             session_id, token = self.server.manager.create_call_token(channel=channel, voice=voice)
 
             # Secure HTTPS URL for mobile browser microphone permissions
-            tailscale_domain = "zothos.local"
+            tailscale_domain = os.environ.get("ZOTH_TAILSCALE_DOMAIN", "zothos.local")
+            tailscale_ip = os.environ.get("ZOTH_TAILSCALE_IP", "127.0.0.1")
             call_url = f"https://{tailscale_domain}/call?token={token}"
-            fallback_url = f"http://100.106.132.5:{self.server.server_port}/call?token={token}"
+            fallback_url = f"http://{tailscale_ip}:{self.server.server_port}/call?token={token}"
 
             self._send_json({
                 "status": "created",

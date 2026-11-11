@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent-voice-call"
+version = "2.5.0"
+description = "Zero-dependency full-duplex AI voice calling station with Edge-TTS/Kokoro/espeak synthesis and post-call debriefs."
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+  {name = "1nc0gn30 • NullAI", email = "1nc0gn30@users.noreply.github.com"}
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://zoth.nullai.tech/tools/agent-voice-call"
+Repository = "https://github.com/1nc0gn30/agent-voice-call"
+
+[project.scripts]
+agent-voice-call = "agent_voice_call.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

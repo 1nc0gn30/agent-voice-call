@@ -26,7 +26,7 @@ from .tts_bridge import VOICES, synthesize_speech_wav
 logger = logging.getLogger("agent_voice_call.call_engine")
 
 SIGNAL_SOCKET = "/tmp/signal-cli.sock"
-SIGNAL_ACCOUNT = os.environ.get("SIGNAL_ACCOUNT", "+19482047987")
+SIGNAL_ACCOUNT = os.environ.get("SIGNAL_ACCOUNT", "")
 AZOTH_DIR = Path("/opt/azoth-local-agent")
 WORKSPACE_DIR = Path("/opt")
 
@@ -142,7 +142,7 @@ class CallManager:
         # Fast local intent responses for instant sub-100ms dialogue
         if any(g in lower for g in ("hello", "hey", "hi", "how are you", "are you there")):
             v_name = VOICES.get(session.voice, {}).get("label", "Azoth")
-            return f"Hello Neal. {v_name} here, live on the line. What objective are we tackling?"
+            return f"Hello. {v_name} here, live on the line. What objective are we tackling?"
 
         if "status" in lower or "system" in lower or "temps" in lower:
             try:
@@ -165,7 +165,7 @@ class CallManager:
             try:
                 req_data = json.dumps({
                     "model": model_candidate,
-                    "prompt": f"You are {session.voice.upper()}, 1nc0gn30's sovereign AI partner. Respond out loud to Neal in 1 to 2 concise spoken conversational sentences. Do not use markdown, emojis, or bullet points.\nNeal: {prompt}\nAgent:",
+                    "prompt": f"You are {session.voice.upper()}, 1nc0gn30's sovereign AI partner. Respond out loud in 1 to 2 concise spoken conversational sentences. Do not use markdown, emojis, or bullet points.\nUser: {prompt}\nAgent:",
                     "stream": False,
                     "options": {"num_predict": 50, "temperature": 0.7}
                 }).encode("utf-8")
@@ -180,7 +180,7 @@ class CallManager:
                 continue
 
         # Fallback to Azoth / Antigravity CLI or smart conversational reply
-        return f"Understood, Neal. I have logged that objective and am synchronizing it across the sovereign swarm."
+        return "Understood. I have logged that objective and am synchronizing it across the sovereign swarm."
 
     def _summarize_session(self, session: CallSession) -> Dict[str, Any]:
         """Produce structured debrief of the voice call."""
@@ -215,7 +215,7 @@ class CallManager:
         )
 
         # 1. Signal Dispatch via UNIX socket
-        if os.path.exists(SIGNAL_SOCKET):
+        if os.path.exists(SIGNAL_SOCKET) and SIGNAL_ACCOUNT:
             try:
                 import socket
                 payload = {
